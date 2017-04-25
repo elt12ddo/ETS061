@@ -3,6 +3,7 @@
 *.class
 *.war
 *.ear
+*number.m
 
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode
 
