@@ -1,4 +1,4 @@
-package task2;
+package task3;
 
 class Event{
 	public double eventTime;
