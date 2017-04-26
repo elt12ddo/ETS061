@@ -1,4 +1,4 @@
-package assignment1;
+package task2;
 
 class Event{
 	public double eventTime;

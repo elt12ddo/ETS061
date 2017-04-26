@@ -1,4 +1,4 @@
-package assignment1;
+package task1;
 
 public class G{
 	public static final int ARRIVAL = 1, READY = 2, MEASURE = 3, READY2 = 4;

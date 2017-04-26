@@ -1,4 +1,4 @@
-package assignment1;
+package task2;
 
 import java.util.*;
 import java.io.*;

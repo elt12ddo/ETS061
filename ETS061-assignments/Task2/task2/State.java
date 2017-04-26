@@ -1,4 +1,4 @@
-package assignment1;
+package task2;
 
 import java.util.*;
 import java.io.*;
@@ -8,7 +8,7 @@ class State{
 	
 
 	Random slump = new Random();
-	SimpleFileWriter W = new SimpleFileWriter("number.m", false);
+	SimpleFileWriter W = new SimpleFileWriter("./Task2/number.m", false);
 	
 	public void TreatEvent(Event x){
 		switch (x.eventType){
