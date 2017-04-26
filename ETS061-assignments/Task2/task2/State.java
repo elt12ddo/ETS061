@@ -4,51 +4,59 @@ import java.util.*;
 import java.io.*;
 
 class State{
-	public int numberInQueue = 0, accumulated = 0, noMeasurements = 0, numberInQueue2 = 0, nbrRejected = 0, accumulated2 = 0, nbrOfArrivals = 0;
-	
+	public int numberInQueueA = 0, numberInQueueB = 0, accumulated = 0, noMeasurements = 0;
 
 	Random slump = new Random();
 	SimpleFileWriter W = new SimpleFileWriter("./Task2/number.m", false);
 	
 	public void TreatEvent(Event x){
 		switch (x.eventType){
-			case G.ARRIVAL:{
-				nbrOfArrivals++;
-				//System.out.print("K ");
-				if(numberInQueue >= 10){
-					nbrRejected++;
-				}else{
-					numberInQueue++;
-					//System.out.println(numberInQueue);
+			case G.ARRIVAL_A:{
+				numberInQueueA++;
+				if(numberInQueueA + numberInQueueB == 1){
+					EventList.InsertEvent(G.READY_A, G.time + 0.002);
 				}
-				if (numberInQueue == 1){
-					EventList.InsertEvent(G.READY, G.time - (1/2.1)*Math.log(slump.nextDouble()));
-				}
-				EventList.InsertEvent(G.ARRIVAL, G.time + 1);
+				EventList.InsertEvent(G.ARRIVAL_A, G.time - (1/150.0)*Math.log(slump.nextDouble()));
 			} break;
-			case G.READY:{
-				numberInQueue--;
-				numberInQueue2++;
-				if(numberInQueue2 == 1){
-					EventList.InsertEvent(G.READY2, G.time + 2);
+			case G.ARRIVAL_B:{
+				numberInQueueB++;
+				if(numberInQueueA + numberInQueueB == 1){
+					EventList.InsertEvent(G.READY_B, G.time + 0.004);
 				}
-				if (numberInQueue > 0){
-					EventList.InsertEvent(G.READY, G.time - (1/2.1)*Math.log(slump.nextDouble()));
-				}
+			} break;
+			case G.READY_A:{
+				numberInQueueA--;
+				//readyHandler(true);//a
+				readyHandler(false);//c
+				EventList.InsertEvent(G.ARRIVAL_B, G.time + 1);//a
+				//EventList.InsertEvent(G.ARRIVAL_B, G.time - (1/1.0)*Math.log(slump.nextDouble()));//b
+			} break;
+			case G.READY_B:{
+				numberInQueueB--;
+				//readyHandler(true);//a
+				readyHandler(false);//c
 			} break;
 			case G.MEASURE:{
-				accumulated = accumulated + numberInQueue;
-				accumulated2 = accumulated2 + numberInQueue2;
+				accumulated = accumulated + numberInQueueA + numberInQueueB;
 				noMeasurements++;
-				EventList.InsertEvent(G.MEASURE, G.time - (1/5.0)*Math.log(slump.nextDouble()));
-				W.println(String.valueOf(numberInQueue));
+				EventList.InsertEvent(G.MEASURE, G.time + 0.1);
+				W.println(String.valueOf(numberInQueueA+numberInQueueB));
 			} break;
-			case G.READY2:{
-				numberInQueue2--;
-				if (numberInQueue2 > 0){
-					EventList.InsertEvent(G.READY2, G.time + 2);
-				}
-			} break;
+		}
+	}
+	private void readyHandler(boolean bFirst){
+		if(bFirst){
+			if(numberInQueueB > 0){
+				EventList.InsertEvent(G.READY_B, G.time + 0.004);
+			} else if(numberInQueueA > 0){
+				EventList.InsertEvent(G.READY_A, G.time + 0.002);
+			}
+		} else {
+			if(numberInQueueA > 0){
+				EventList.InsertEvent(G.READY_A, G.time + 0.002);
+			} else if(numberInQueueB > 0){
+				EventList.InsertEvent(G.READY_B, G.time + 0.004);
+			}
 		}
 	}
 }
