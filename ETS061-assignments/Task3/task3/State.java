@@ -8,7 +8,7 @@ class State{
 	
 
 	Random slump = new Random();
-	SimpleFileWriter W = new SimpleFileWriter("./Task1/number.m", false);
+	SimpleFileWriter W = new SimpleFileWriter("./Task3/number.m", false);
 	
 	public void TreatEvent(Event x){
 		switch (x.eventType){
