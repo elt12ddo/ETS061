@@ -33,7 +33,7 @@ public class MainSimulation extends Global{
     	Q5.sendTo = null;
     	Dispatcher1 D = new Dispatcher1(Q1,Q2,Q3,Q4,Q5); 
     	Gen Generator = new Gen();
-    	Generator.lambda = 9; //Generator ska generera nio kunder per sekund  //Generator shall generate 9 customers per second
+    	Generator.lambda = 1/0.11; //Generator ska generera nio kunder per sekund  //Generator shall generate 9 customers per second
     	Generator.sendTo = D; //De genererade kunderna ska skickas till kösystemet QS  // The generated customers shall be sent to Q1
 
     	//Här nedan skickas de första signalerna för att simuleringen ska komma igång.
@@ -58,8 +58,11 @@ public class MainSimulation extends Global{
 
     	//Slutligen skrivs resultatet av simuleringen ut nedan:
     	//Finally the result of the simulation is printed below:
-
-    	System.out.println("Mean number of customers in queuing system: " + 1.0*Q1.accumulated/Q1.noMeasurements);
+    	System.out.println("Mean number of customers in Q1: " + 1.0*Q1.accumulated/Q1.noMeasurements);
+    	System.out.println("Mean number of customers in Q2: " + 1.0*Q2.accumulated/Q2.noMeasurements);
+    	System.out.println("Mean number of customers in Q3: " + 1.0*Q3.accumulated/Q3.noMeasurements);
+    	System.out.println("Mean number of customers in Q4: " + 1.0*Q4.accumulated/Q4.noMeasurements);
+    	System.out.println("Mean number of customers in Q5: " + 1.0*Q5.accumulated/Q5.noMeasurements);
 
     }
 }

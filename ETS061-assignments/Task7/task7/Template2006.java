@@ -4,23 +4,23 @@ import java.util.*;
 import java.io.*;
 
 public class Template2006 {
+	static Random slump = new Random();
  
     public static void main(String[] args) throws IOException {
+    	double acc = 0.0;
     	Event actEvent;
-    	State actState = new State();
-    	new EventList();
-        EventList.InsertEvent(G.ARRIVAL, 1);
-        EventList.InsertEvent(G.MEASURE, 5);
-    	while (actState.noMeasurements < 1000){
-    		actEvent = EventList.FetchEvent();
-    		G.time = actEvent.eventTime;
-    		actState.TreatEvent(actEvent);
+    	for(int k = 0; k < 1000; k++){
+    		State actState = new State();
+    		new EventList();
+    		EventList.InsertEvent(G.FAIL1, (slump.nextDouble()*4.0) + 1.0);
+    		EventList.InsertEvent(G.FAIL2, (slump.nextDouble()*4.0) + 1.0);
+    		while (actState.fails < 2){
+    			actEvent = EventList.FetchEvent();
+    			G.time = actEvent.eventTime;
+    			actState.TreatEvent(actEvent);
+    		}
+    		acc = acc + G.time;
     	}
-    	System.out.println("rej: "+ actState.nbrRejected);
-    	System.out.println("P(Rejected): " + 1.0*actState.nbrRejected/actState.nbrOfArrivals);
-    	System.out.println("Mean nbr of customers in Q2: " + 1.0*actState.accumulated2/actState.noMeasurements);
-    	System.out.println(actState.accumulated);
-    	System.out.println(actState.noMeasurements);
-    	actState.W.close();
+    	System.out.println("Average time to breakdown: " + acc/1000.0);
     }
 }

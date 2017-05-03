@@ -16,7 +16,7 @@ class State{
 				if(numberInQueueA + numberInQueueB == 1){
 					EventList.InsertEvent(G.READY_A, G.time + 0.002);
 				}
-				EventList.InsertEvent(G.ARRIVAL_A, G.time - (1/150.0)*Math.log(slump.nextDouble()));
+				EventList.InsertEvent(G.ARRIVAL_A, G.time - (1/150.0)*Math.log(1.0-slump.nextDouble()));
 			} break;
 			case G.ARRIVAL_B:{
 				numberInQueueB++;
