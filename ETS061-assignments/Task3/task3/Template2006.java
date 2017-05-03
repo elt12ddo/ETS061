@@ -16,11 +16,12 @@ public class Template2006 {
     		G.time = actEvent.eventTime;
     		actState.TreatEvent(actEvent);
     	}
-    	System.out.println("rej: "+ actState.nbrRejected);
-    	System.out.println("P(Rejected): " + 1.0*actState.nbrRejected/actState.nbrOfArrivals);
-    	System.out.println("Mean nbr of customers in Q2: " + 1.0*actState.accumulated2/actState.noMeasurements);
-    	System.out.println(actState.accumulated);
-    	System.out.println(actState.noMeasurements);
+    	double acc = 0.0;
+    	for(int i = 0; i < actState.stop.size(); i++){
+    		acc = acc + actState.stop.get(i) - actState.start.get(i);
+    	}
+    	System.out.println("Mean nbr of customers in system: " + 1.0*(actState.accumulated2 + actState.accumulated)/actState.noMeasurements);
+    	System.out.println("HELLO WORLD: " + acc / actState.stop.size());
     	actState.W.close();
     }
 }
