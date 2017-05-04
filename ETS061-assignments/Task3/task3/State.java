@@ -20,7 +20,7 @@ class State{
 				if (numberInQueue == 1){
 					EventList.InsertEvent(G.READY, G.time - (1.0)*Math.log(1.0-slump.nextDouble()));
 				}
-				EventList.InsertEvent(G.ARRIVAL, G.time - (2.0)*Math.log(1.0-slump.nextDouble()));//change here
+				EventList.InsertEvent(G.ARRIVAL, G.time - (1.1)*Math.log(1.0-slump.nextDouble()));//change here
 			} break;
 			case G.READY:{
 				numberInQueue--;

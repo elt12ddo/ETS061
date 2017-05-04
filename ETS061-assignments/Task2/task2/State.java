@@ -29,7 +29,7 @@ class State{
 				//readyHandler(true);//a
 				readyHandler(false);//c
 				EventList.InsertEvent(G.ARRIVAL_B, G.time + 1);//a
-				//EventList.InsertEvent(G.ARRIVAL_B, G.time - (1/1.0)*Math.log(slump.nextDouble()));//b
+				//EventList.InsertEvent(G.ARRIVAL_B, G.time - (1.0)*Math.log(1.0-slump.nextDouble()));//b
 			} break;
 			case G.READY_B:{
 				numberInQueueB--;
