@@ -33,7 +33,7 @@ A = [2 0 0 0 0;
  fval = -fval
  
  opt = x;
- %There is no upper limit sice the optimal solution already uses the max
+ %There is no upper limit since the optimal solution already uses the max
  %amount of PI so the upper limit will be infinity
  while 1
      c(1) = c(1) + 0.001;
