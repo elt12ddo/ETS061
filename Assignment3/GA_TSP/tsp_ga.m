@@ -82,28 +82,26 @@ for iter = 1:numGen
     % to select a fraction eliteFract of the best members of the current
     % population pop. Keep these elite members in matrix elitePop.
     % Your elite selection code goes here:
-    eliteSize = round(eliteFract*popSize);
-    elitePop = zeros(eliteSize,n);
-    fitness = 1./totalDist;
-    eliteIndex = zeros(1,eliteSize);
-    
-    for b=1:popSize
-        for c=1:eliteSize
-            if fitness(b) < fitness(eliteIndex(c))
-                eliteIndex(c) = b;
-                break
-            end
+    eval=1./totalDist;
+    eliteSize=(round(eliteFract*popSize));
+    indexPop=ones(eliteSize,1);
+    for i=1:popSize
+        for j=1:eliteSize
+           % fprintf('hhjjo');
+           if eval(indexPop(j,1))>=eval(i) 
+               indexPop(j)=i;
+               break;
+           end
             
         end
     end
-    
-    for d=1:eliteSize
-        elitePop(d) = pop(eliteIndex(d));
+    elitePop=zeros(eliteSize,n);
+    %size(elitePop(1,1:end))
+    %size(pop(1,1:end))
+    %indexPop
+    for i=1:eliteSize
+       elitePop(i,1:end)=pop(indexPop(i),1:end); 
     end
-    
-    % ...
-    % ...
-    % ...
     %%%%%%% end of elite selection %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     
@@ -113,37 +111,43 @@ for iter = 1:numGen
     % pop. Then apply a roulette wheel selection to create a new population.
     % Keep this new population in matrix newPop.
     % Your roulette wheel selection code goes here:
-    fitvals = 1./totalDist;
-    F = sum(fitvals);
-    probabilities = fitvals./F;
-    q = zeros(1,popSize);
-    
+    eval=1./totalDist;
+    F=sum(eval);
+    prob=eval./F;   
+    %cumultative propability
+    q=zeros(1,popSize);
     for i=1:popSize
-        temp = 0;
-        for j=1:i
-            temp = temp + probabilities(j);
-        end
-        q(i) = temp;
+        temp=0;
+       for j=1:i
+           temp=temp+prob(j);
+       end
+        q(1,i)=temp;     
+       
     end
     
-    %selection
-    newPop = zeros(popSize,n);
-    
-    for a=1:popSize
-        r = rand();
-        if r < q(1)
-            newPop(a) = pop(1);
+    %selection process
+    newPop=zeros(popSize,n);
+    m=0;
+    count=1;
+    while m~=popSize
+        r=rand;
+        if r<q(1,1)
+            newPop(count,:)=pop(1,:);
+            count=count+1;
+            m=m+1;
         else
-            for m=2:popSize
-                if q(a-1) < r && q(a) >= r
-                    newPop(a) = pop(m);
-                end   
+            for i=2:popSize
+                
+                if r>=q(i-1)&& r<q(i)
+                    newPop(count,:)=pop(i,:);
+                    count=count+1;
+                    m=m+1;
+                    
+                end
             end
-        end 
+        end
     end
-    % ...
-    % ...
-    % ...
+    
     %%%%%%% end of roulette wheel selection %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     
@@ -151,30 +155,25 @@ for iter = 1:numGen
     % Update distance vector totalDist according to the selected population
     % newPop. Your code for updating totalDist goes here:
     totalDist = calcToursDistances(newPop, popSize, dmat, n);
-    % ...
-    % ...
-    % ...
     %%%%%% end of totalDist update %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     
     
     % Use the updated totalDist to calculate the new fitness values and 
     % cummulative probability distribution. Your code goes here:
-    fitvals = 1./totalDist;
-    F = sum(fitvals);
-    probabilities = fitvals./F;
-    q = zeros(1,popSize);
-    
+    eval=1./totalDist;
+    F=sum(eval);
+    prob=eval./F;   
+    %cumultative propability
+    q=zeros(1,popSize);
     for i=1:popSize
-        temp = 0;
-        for j=1:i
-            temp = temp + probabilities(j);
-        end
-        q(i) = temp;
+        temp=0;
+       for j=1:i
+           temp=temp+prob(j);
+       end
+        q(1,i)=temp;     
+       
     end
-    % ...
-    % ...
-    % ...
     %%%%%% end of fitness and probabilty distribution update %%%%%%%%%%%%%%
     
     
@@ -186,98 +185,181 @@ for iter = 1:numGen
     % be selected purely random from the population newPop.
     % Your code goes here:
     % your cross-over code
-    chosen = [];
-    for e=1:popSize
-        random = rand();
-        if r < crossProb
-            chosen(i,:) = newPop(i,:);
-        end
-    end
+    T1=[];
+    T2=[];
+    T11=[];
+    for i=1:popSize
+       r=rand;
+       if r<crossProb
+          P1=newPop(i,:);
+          indexP1=i;
+          for e=i:popSize
+              r1=rand;
+              if r1<crossProb
+                  P2=newPop(e,:);
+                  indexP2=e;
+                  break;
+              end
+          end
+          if ~isequal(P2,[])
+              %Do crossover
+              K=floor(0.3*size(P1,2));
+              O=[];
+              T1=P1;
+              T2=P2;
+              %size(T1)
+              while size(T1,2)~=0
+                  minimum=min(size(T1,2),K);
+                  T11=T1(1,1:minimum);
+                  T12=T1(1,minimum+1:end);
+                  O=[O T11];
+                 % T1
+                  %T2
+                  %T11
+                  %O
+                  %size(O)
+                  for i=1:size(T11,2)
+                      m=1;
+                      while 1
+                          if T1(1,m)==T11(1,i)
+                              T1(m)=[];                              
+                          end
+                          m=m+1;
+                          if m>size(T1,2)
+                              break;
+                          end
+                      end
+                      if size(T2,2)~=0
+                        k=1;
+                          while 1
+                              
+                              if T2(1,k)==T11(1,i)
+                                  T2(k)=[];
+                              end
+                              k=k+1;
+                              if k>size(T2,2)
+                                  break;
+                              end
+                          end
+                      end
+                      
+                  end
+                  X=T1;
+                  T1=T2;
+                  T2=X;
+                  
+              end
+              
+              r = rand();
+              offspring = O;
+              if r <= mutProb
+                  off_indx = randi([1 popSize], 1, 1);
+                   % replace this line of code so that the offspring
+                  % will be the one created by the
+                  % cross-over operation.
+                  
+                  routeInsertionPoints = sort(ceil(n*rand(1,2)));
+                  I = routeInsertionPoints(1);
+                  J = routeInsertionPoints(2);
+                  
+                  % 2-opt mutation (simply swaps two cities)
+                  offspring([I J]) = offspring([J I]);
+                  
+                  % now, you should replace one of the parents invloved in
+                  % cross-over with this mutated offspring, then update the
+                  % population newPop.
+              end
+              %%%%%%%%%%%%% End of Mutation Operator %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+              
+              random=randi(2);
+             
+              if random == 1
+                  newPop(indexP1,:)=offspring(1,:);
+              else
+                  newPop(indexP2,:)=offspring(1,:);
+              end
+              
+          end
+          
+       end
+       P1=[];
+       P2=[];
+       
+    end% after crossover and mutation
     
-    if mod(size(chosen,1),2) ~= 0
-        r = randi(size(chosen,1));
-        chosen(r,:) = [];
-    end
     
-    chosen_cpy = chosen;
     
-    for f=1:(size(chosen,1)./2)
-        K = floor(0.3.*size(chosen(f)));
+    
+    
+%     nbrOfCross=crossProb.*popSize;
+%     chosen=[];
+%    
+%     for i=1:popSize
+%         r=rand;
+%         if r<crossProb
+%             chosen(i,:)=newPop(i,:);
+%           
+%         end
+%         
+%     end
+%     
+%     if mod(size(chosen,1),2)~=0
+%         r=randi(size(chosen,1));
+%         chosen(r,:)=[];
+%     end
+%     
+%     copy=chosen;
+%     usedVector=zeros(size(newPop,1),1);
+%     for f=1:(size(chosen,1)./2)
+%         K=floor(0.3.*size(f,1));
+%         r=randi(size(copy,1));
+%         T1=copy(r,:);
+%         P1=T1;
+%         copy(r,:)=[];
+%         r1=randi(size(copy,1));
+%         T2=copy(r1,:);
+%         P2=T2;
+%         copy(r1,:)=[];
+%         O=[];
+%         
+%         while size(T1,1)~=0
+%             minimum=min(size(T1,1),K);
+%             T11=T1(1:minimum);
+%             T12=T1(minimum+1:end);
+%             O=[O T11];
+%             
+%             for i=1:size(T11,1)
+%                 
+%                 for j=1:size(T1,1)
+%                     if T1(j)==T11(i)
+%                         T1(j)=[];
+%                     end
+%                 end
+%                 
+%                 for k=1:size(T2,1)
+%                     if T2(k)==T11(i)
+%                         T2(k)=[];
+%                     end
+%                 end
+%                 
+%             end
+%             X=T1;
+%             T1=T2;
+%             T2=X;
+%             
+%         end
         
-        random = randi(size(chosen_cpy,1))
-        T1 = chosen_cpy(random,1);
-        P1 = T1;
-        chosen_cpy(random,1) = [];
-        random = randi(size(chosen_cpy,1))
-        T2 = chosen_cpy(random,1);
-        P2 = T2;
-        chosen_cpy(random,1) = [];
         
-        O = [];
-        
-        while size(T1) ~= 0
-            min = min(size(T1,1),K);
-            T_11 = T1(1:min);
-            T_12 = T1(min+1:end);
-            O = [O T_11];
-            
-            for g=1:size(T_11,1)
-                
-                for h=1:size(T1,1)
-                    if T1(h) == T_11(g)
-                        T1(h) = [];
-                    end
-                    
-                end
-                for i=1:size(T2,1)
-                    if T2(h) == T_11(g)
-                        T2(h) = [];
-                    end
-                    
-                end
-                
-            end
-            X = T1;
-            T1 = T2;
-            T2 = X;
-            
-        end
-        
-        
-        
-        
-        
-        % ...
-        % ...
-        % ...
         %%%%%%% End of cross-over operator %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
         
         
-        %%%%%%%%%%%%% Mutation Operator %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        r = rand();
-        if r <= mutProb
-            %off_indx = randi([1 popSize], 1, 1);
-            offspring = O; %pop(off_indx, :); % replace this line of code so that the offspring
-            % will be the one created by the
-            % cross-over operation.
-            
-            routeInsertionPoints = sort(ceil(n*rand(1,2)));
-            I = routeInsertionPoints(1);
-            J = routeInsertionPoints(2);
-            
-            % 2-opt mutation (simply swaps two cities)
-            offspring([I J]) = offspring([J I]);
-            
-            % now, you should replace one of the parents invloved in
-            % cross-over with this mutated offspring, then update the
-            % population newPop.
-        end
         
-        %%%%%%%%%% End of mutation operator %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   
         
         
-    end%End crossover
+    %end  %end cross-over
+    %%%%%%%%%% End of mutation operator %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     
     
@@ -285,15 +367,32 @@ for iter = 1:numGen
     % members you stored in matrix elitePop (see Elite selection in the begining
     % of this iteration).
     % Your code goes here:
-    % ...
-    % ...
-    % ...
-    % ...
+   
+     totalDist = calcToursDistances(newPop, popSize, dmat, n);
+     eval=1./totalDist;
+     indexWorst=ones(eliteSize,1);
+     for i=1:size(eval,2)
+        for j=1:eliteSize
+           if eval(i)<eval(indexWorst(j))
+               indexWorst(j)=i;
+               break;
+               
+           end
+            
+        end
+         
+         
+     end
+    
+    for i=1:eliteSize
+       newPop(indexWorst(i),:)=elitePop(i,:);        
+        
+    end
     %%%%%%% End of elite replacement %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     
     % Finally, the new population newPop should become the current population.
-    % pop = newPop;    % Uncomment this line when you finished all previous
+     pop = newPop;    % Uncomment this line when you finished all previous
                        % steps.
 
 end
