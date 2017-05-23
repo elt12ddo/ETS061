@@ -57,7 +57,7 @@ xy = cities';
 results = zeros(4000,2);
 for numGen = 1:4000
     userConfig = struct('xy', xy, 'popSize', 200, 'numGen', numGen, 'crossProb', 0.25, 'mutProb', 0.5, 'eliteFract', 0.02);
-    resultStruct = tsp_ga(userConfig);
+    resultStruct = tsp_ga1(userConfig);
     results(numGen,1) = resultStruct.meanFitness;
     results(numGen,2) = resultStruct.minDist;
     if mod(numGen,100)==0
