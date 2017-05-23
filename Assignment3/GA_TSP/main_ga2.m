@@ -65,9 +65,9 @@ for numGen = 100:100:2000
         % resultStruct.optRoute
         
         % the distance of the best tour
-        fprintf('\n Number of generations: %d \n Run number: %d \n The distance of the best tour = %d\n',numGen, runs, resultStruct.minDist);
         results(numGen/100,runs) = resultStruct.minDist;
     end
+    fprintf('Run number: %d\n',numGen);
 end
 
 % Implement your plotting here, using the average and confidence interval results:
