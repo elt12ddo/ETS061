@@ -70,6 +70,7 @@ totalDist = zeros(1,popSize);
 
 
 %% Starting GA iterations. In each iteration, a new generation is created %%%%%%
+theResult = zeros(2,numGen);
 for iter = 1:numGen
     
     % Function calcToursDistances evaluates Each population member and 
@@ -87,7 +88,7 @@ for iter = 1:numGen
     eliteIndex=ones(eliteSize,1);
     for i=1:popSize
         for j=1:eliteSize
-           if fitness(eliteIndex(j,1))>=fitness(i)
+           if fitness(eliteIndex(j,1))<=fitness(i)
                eliteIndex(j)=i;
                break;
            end
@@ -277,8 +278,12 @@ for iter = 1:numGen
     
     
     % Finally, the new population newPop should become the current population.
-     pop = newPop;
-
+    pop = newPop;
+    totalDist = calcToursDistances(pop, popSize, dmat, n);
+    fitness = 1./totalDist;
+    theResult(1,iter) = mean(fitness);
+    [minDist,index] = min(totalDist);
+    theResult(2,iter) = minDist;
 end
 %%%%%% End of GA ietartions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -286,20 +291,19 @@ end
 % Now, we find the best route in the last generation (you don't need to
 % change this part). The best route is returned in optRoute, and its 
 % distance in minDist.
-totalDist = calcToursDistances(pop, popSize, dmat, n);
-[minDist,index] = min(totalDist);
-optRoute = pop(index,:);
 
-% Calculate average fitness
-fitness = 1./totalDist;
-meanFitness = mean(fitness);
+% totalDist = calcToursDistances(pop, popSize, dmat, n);
+% [minDist,index] = min(totalDist);
+% optRoute = pop(index,:);
+% 
+% % Calculate average fitness
+% fitness = 1./totalDist;
+% meanFitness = mean(fitness);
 
 % Return Output
 if nargout
     resultStruct = struct( ...
-        'optRoute',    optRoute, ...
-        'meanFitness',    meanFitness, ...
-        'minDist',     minDist);
+        'theResult',     theResult);
     
     varargout = {resultStruct};
 end

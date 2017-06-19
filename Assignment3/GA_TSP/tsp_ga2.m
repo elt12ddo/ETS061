@@ -87,7 +87,7 @@ for iter = 1:numGen
     eliteIndex=ones(eliteSize,1);
     for i=1:popSize
         for j=1:eliteSize
-           if fitness(eliteIndex(j,1))>=fitness(i)
+           if fitness(eliteIndex(j,1))<=fitness(i)
                eliteIndex(j)=i;
                break;
            end

@@ -46,7 +46,7 @@ end
 % loadgr96();          % 96 cities
 
 % I have chosen a data file from the above list
- loadatt48();
+ loadst70();
 
 %% prepare the distance matrix
 load('cities.mat');
@@ -84,7 +84,7 @@ end
 x = linspace(100,2000,20);
 plot(x,newResults(x/100,1),'*')
 hold on
-plot(x,newResults(x/100,2),'*','r')
+plot(x,newResults(x/100,2),'*')
 plot(x,newResults(x/100,3),'k')
 legend('Lower bound','Upper bound','Mean','location','best')
 title('Average distance')

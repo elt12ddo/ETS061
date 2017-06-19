@@ -46,7 +46,7 @@ end
 % loadgr96();          % 96 cities
 
 % I have chosen a data file from the above list
- loadatt48();
+loadst70();
 
 %% prepare the distance matrix
 load('cities.mat');
@@ -54,35 +54,23 @@ xy = cities';
 
 % you should update the following code to obtain the average and 95%
 % confidence interval for each configuration of numGen
-results = zeros(4000,2);
-for numGen = 1:4000
-    userConfig = struct('xy', xy, 'popSize', 200, 'numGen', numGen, 'crossProb', 0.25, 'mutProb', 0.5, 'eliteFract', 0.02);
-    resultStruct = tsp_ga1(userConfig);
-    results(numGen,1) = resultStruct.meanFitness;
-    results(numGen,2) = resultStruct.minDist;
-    if mod(numGen,100)==0
-        fprintf('Run number: %d \n', numGen);
-    end
-end
+numGen = 4000;
+userConfig = struct('xy', xy, 'popSize', 200, 'numGen', numGen, 'crossProb', 0.25, 'mutProb', 0.5, 'eliteFract', 0.02);
+resultStruct = tsp_ga1(userConfig);
+results = resultStruct.theResult;
+
+
 
 % Implement your plotting here, using the average and confidence interval results:
 % plots ...
 x = linspace(1,4000,4000);
 figure(1)
-plot(x,results(x,1))
+plot(x,results(1,x))
 title('Mean fitness as a function of the iteration number')
 xlabel('Iteration')
 ylabel('Average fitness')
 figure(2);
-plot(x,results(x,2))
+plot(x,results(2,x))
 title('Minimum distance for each iteration')
 xlabel('Iteration')
 ylabel('Best distance')
-
-
-
-
-
-
-
-
